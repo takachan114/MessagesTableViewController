@@ -24,7 +24,6 @@
 #define kPaddingBottom 8.0f
 #define kBubblePaddingRight 35.0f
 
-
 @interface JSBubbleView()
 
 - (void)setup;
@@ -67,26 +66,31 @@
         [self addSubview:bubbleImageView];
         _bubbleImageView = bubbleImageView;
         
-        UITextView *textView = [[UITextView alloc] init];
-        textView.font = [UIFont systemFontOfSize:16.0f];
-        textView.textColor = [UIColor blackColor];
-        textView.editable = NO;
-        textView.userInteractionEnabled = YES;
-        textView.showsHorizontalScrollIndicator = NO;
-        textView.showsVerticalScrollIndicator = NO;
-        textView.scrollEnabled = NO;
-        textView.backgroundColor = [UIColor clearColor];
-        textView.contentInset = UIEdgeInsetsZero;
-        textView.scrollIndicatorInsets = UIEdgeInsetsZero;
-        textView.contentOffset = CGPointZero;
-        [self addSubview:textView];
-        [self bringSubviewToFront:textView];
-        _textView = textView;
+        STTweetLabel *textLabel = [[STTweetLabel alloc] init];
+        textLabel.font = [UIFont systemFontOfSize:16.0f];
+        textLabel.userInteractionEnabled = YES;
+        textLabel.backgroundColor = [UIColor clearColor];
+        [textLabel setAttributes:nil hotWord:STTweetHandle];
+        [textLabel setAttributes:@{
+                                   NSForegroundColorAttributeName : [UIColor blackColor],
+                                   NSFontAttributeName            : [UIFont systemFontOfSize:16.0f],
+                                   }];
+        [textLabel setAttributes:@{
+                                   NSForegroundColorAttributeName : [UIColor orangeColor],
+                                   NSFontAttributeName            : [UIFont systemFontOfSize:16.0f],
+                                   }
+                         hotWord:STTweetHashtag];
+        [textLabel setAttributes:@{
+                                   NSForegroundColorAttributeName : [UIColor orangeColor],
+                                   NSFontAttributeName            : [UIFont systemFontOfSize:16.0f],
+                                   }
+                         hotWord:STTweetLink];
+        [textLabel setAttributes:nil hotWord:STTweetHandle];
         
-        if ([_textView respondsToSelector:@selector(textContainerInset)]) {
-            _textView.textContainerInset = UIEdgeInsetsMake(8.0f, 4.0f, 2.0f, 4.0f);
-        }
-        
+        [self addSubview:textLabel];
+        [self bringSubviewToFront:textLabel];
+        _textLabel = textLabel;
+
         [self addTextViewObservers];
         
 //        NOTE: TODO: textView frame & text inset
@@ -105,34 +109,34 @@
 {
     [self removeTextViewObservers];
     _bubbleImageView = nil;
-    _textView = nil;
+    _textLabel = nil;
 }
 
 #pragma mark - KVO
 
 - (void)addTextViewObservers
 {
-    [_textView addObserver:self
-                forKeyPath:@"text"
-                   options:NSKeyValueObservingOptionNew
-                   context:nil];
+    [_textLabel addObserver:self
+                 forKeyPath:@"text"
+                    options:NSKeyValueObservingOptionNew
+                    context:nil];
     
-    [_textView addObserver:self
-                forKeyPath:@"font"
-                   options:NSKeyValueObservingOptionNew
-                   context:nil];
+    [_textLabel addObserver:self
+                 forKeyPath:@"font"
+                    options:NSKeyValueObservingOptionNew
+                    context:nil];
     
-    [_textView addObserver:self
-                forKeyPath:@"textColor"
-                   options:NSKeyValueObservingOptionNew
-                   context:nil];
+    [_textLabel addObserver:self
+                 forKeyPath:@"textColor"
+                    options:NSKeyValueObservingOptionNew
+                    context:nil];
 }
 
 - (void)removeTextViewObservers
 {
-    [_textView removeObserver:self forKeyPath:@"text"];
-    [_textView removeObserver:self forKeyPath:@"font"];
-    [_textView removeObserver:self forKeyPath:@"textColor"];
+    [_textLabel removeObserver:self forKeyPath:@"text"];
+    [_textLabel removeObserver:self forKeyPath:@"font"];
+    [_textLabel removeObserver:self forKeyPath:@"textColor"];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -140,10 +144,10 @@
                         change:(NSDictionary *)change
                        context:(void *)context
 {
-    if (object == self.textView) {
+    if (object == self.textLabel) {
         if ([keyPath isEqualToString:@"text"]
-           || [keyPath isEqualToString:@"font"]
-           || [keyPath isEqualToString:@"textColor"]) {
+            || [keyPath isEqualToString:@"font"]
+            || [keyPath isEqualToString:@"textColor"]) {
             [self setNeedsLayout];
         }
     }
@@ -154,7 +158,7 @@
 - (void)setFont:(UIFont *)font
 {
     _font = font;
-    _textView.font = font;
+    _textLabel.font = font;
 }
 
 #pragma mark - UIAppearance Getters
@@ -176,7 +180,7 @@
 
 - (CGRect)bubbleFrame
 {
-    CGSize bubbleSize = [JSBubbleView neededSizeForText:self.textView.text];
+    CGSize bubbleSize = [JSBubbleView neededSizeForText:self.textLabel.text];
     
     return CGRectIntegral(CGRectMake((self.type == JSBubbleMessageTypeOutgoing ? self.frame.size.width - bubbleSize.width : 0.0f),
                                      kMarginTop,
@@ -203,7 +207,7 @@
                                   self.bubbleImageView.frame.size.width - (self.bubbleImageView.image.capInsets.right / 2.0f),
                                   self.bubbleImageView.frame.size.height - kMarginTop);
     
-    self.textView.frame = CGRectIntegral(textFrame);
+    self.textLabel.frame = CGRectIntegral(textFrame);
 }
 
 #pragma mark - Bubble view
@@ -212,7 +216,7 @@
 {
     CGFloat maxWidth = [UIScreen mainScreen].applicationFrame.size.width * 0.70f;
     CGFloat maxHeight = MAX([JSMessageTextView numberOfLinesForMessage:txt],
-                         [txt js_numberOfLines]) * [JSMessageInputView textViewLineHeight];
+                            [txt js_numberOfLines]) * [JSMessageInputView textViewLineHeight];
     maxHeight += kJSAvatarImageSize;
     
     CGSize stringSize;

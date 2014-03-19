@@ -21,6 +21,9 @@ static const CGFloat kJSLabelPadding = 5.0f;
 static const CGFloat kJSTimeStampLabelHeight = 15.0f;
 static const CGFloat kJSSubtitleLabelHeight = 15.0f;
 
+@interface STTweetLabel (Private)
+@property (strong) UITextView *textView;
+@end
 
 @interface JSBubbleMessageCell()
 
@@ -216,7 +219,7 @@ static const CGFloat kJSSubtitleLabelHeight = 15.0f;
 - (void)prepareForReuse
 {
     [super prepareForReuse];
-    self.bubbleView.textView.text = nil;
+    self.bubbleView.textLabel.text = nil;
     self.timestampLabel.text = nil;
     self.avatarImageView = nil;
     self.subtitleLabel.text = nil;
@@ -233,7 +236,10 @@ static const CGFloat kJSSubtitleLabelHeight = 15.0f;
 
 - (void)setText:(NSString *)text
 {
-    self.bubbleView.textView.text = text;
+    self.bubbleView.textLabel.text = text;
+    self.bubbleView.textLabel.textView.contentInset = UIEdgeInsetsZero;
+    self.bubbleView.textLabel.textView.contentOffset = CGPointZero;
+    self.bubbleView.textLabel.textView.textContainerInset = UIEdgeInsetsMake(8.0f, 4.0f, 2.0f, 4.0f);
 }
 
 - (void)setTimestamp:(NSDate *)date
@@ -320,7 +326,7 @@ static const CGFloat kJSSubtitleLabelHeight = 15.0f;
 
 - (void)copy:(id)sender
 {
-    [[UIPasteboard generalPasteboard] setString:self.bubbleView.textView.text];
+    [[UIPasteboard generalPasteboard] setString:self.bubbleView.textLabel.text];
     [self resignFirstResponder];
 }
 
