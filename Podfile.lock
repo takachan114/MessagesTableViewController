@@ -1,13 +1,17 @@
 PODS:
   - JSQSystemSoundPlayer (1.4.0)
-  - STTweetLabel (3.1.8)
+  - STTweetLabel (3.1.8.1)
 
 DEPENDENCIES:
   - JSQSystemSoundPlayer
-  - STTweetLabel (~> 3.1.8)
+  - STTweetLabel (from `https://gist.githubusercontent.com/zeroro713/ee5e95d3cef98b39ffa8/raw/969b908de55dbae60590f4beb9f9b1496c33f7e6/STTweetLabel.podspec`)
+
+EXTERNAL SOURCES:
+  STTweetLabel:
+    :podspec: https://gist.githubusercontent.com/zeroro713/ee5e95d3cef98b39ffa8/raw/969b908de55dbae60590f4beb9f9b1496c33f7e6/STTweetLabel.podspec
 
 SPEC CHECKSUMS:
   JSQSystemSoundPlayer: 28ccd01a92a0cebc6de6361e8499011b4cb6dab7
-  STTweetLabel: 217a31bc289c4c515cf854a53d6bbc45f5ab86fc
+  STTweetLabel: e13de3f8d61047079586f972b4c933b92f60069d
 
 COCOAPODS: 0.29.0
