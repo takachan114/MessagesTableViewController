@@ -4,14 +4,14 @@ PODS:
 
 DEPENDENCIES:
   - JSQSystemSoundPlayer
-  - STTweetLabel (from `https://gist.githubusercontent.com/zeroro713/ee5e95d3cef98b39ffa8/raw/969b908de55dbae60590f4beb9f9b1496c33f7e6/STTweetLabel.podspec`)
+  - STTweetLabel (from `https://gist.githubusercontent.com/zeroro713/ee5e95d3cef98b39ffa8/raw/5997f7cb8d930e574af67a673c6f346f02177fc6/STTweetLabel.podspec`)
 
 EXTERNAL SOURCES:
   STTweetLabel:
-    :podspec: https://gist.githubusercontent.com/zeroro713/ee5e95d3cef98b39ffa8/raw/969b908de55dbae60590f4beb9f9b1496c33f7e6/STTweetLabel.podspec
+    :podspec: https://gist.githubusercontent.com/zeroro713/ee5e95d3cef98b39ffa8/raw/5997f7cb8d930e574af67a673c6f346f02177fc6/STTweetLabel.podspec
 
 SPEC CHECKSUMS:
   JSQSystemSoundPlayer: 28ccd01a92a0cebc6de6361e8499011b4cb6dab7
-  STTweetLabel: e13de3f8d61047079586f972b4c933b92f60069d
+  STTweetLabel: 25d7301f35b49a96e16268d766662a9ebd3bcf44
 
 COCOAPODS: 0.29.0
